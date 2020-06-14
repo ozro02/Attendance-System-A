@@ -17,35 +17,29 @@
   </div>
 </div>
 
-  <%= will_paginate %>
-  <table class="table table-condensed table-hover" id="table-users">
-    <thead>
-      <tr>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
+<table class="table table-condensed table-hover" id="table-users">
+  <% @users.each do |user| %>
+  <div class="row">
+    <tr>
+      <%= user.name %><br>
+      <td class="center">
+      |
+      <%= link_to "削除", user, method: :delete,
+              data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
+      </td>
+    </tr>
+  </div>
+</table>
 
-    <% @users.each do |user| %>
-      <tr>
-        <td>
-        <%= user.name %>
-        </td>
-        <td class="center">
-          <% if current_user.admin? && !current_user?(user) %>
-            <%= link_to "編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-primary" %>
-            <%= link_to "削除", user, method: :delete,
-                data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
-  <%= will_paginate %>
-</div>
-
-<!--モーダルウインドウ表示-->
-<div id="edit-basic-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <%= link_to "編集", update_basic_info_user_path(user), remote: true, class: "btn btn-primary" %>
+      </h4>    
+    </div>
+    <div class="panel-body">
+      <div class="col-md-6 col-md-offset-3">
+      </div>
+    </div>  
+  </div>
+  <% end %>
