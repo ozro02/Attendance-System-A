@@ -31,14 +31,16 @@
   </div>
 </table>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <%= link_to "編集", update_basic_info_user_path(user), remote: true, class: "btn btn-primary" %>
-      </h4>    
-    </div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <button type="button" class="btn btn-lg btn-primary" data-toggle="collapse" data-target="#collapseExample">編集</button>
+    </h4>    
+  </div>
+  <div class="collapse" id="collapseExample">
     <div class="panel-body">
       <div class="col-md-6 col-md-offset-3">
+        <%= render 'form',{user: user} %>
       </div>
     </div>  
   </div>
