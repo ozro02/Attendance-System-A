@@ -26,16 +26,18 @@
       <%= link_to "削除", user, method: :delete,
               data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
       </p>
-<div class="container">
-  <div class="jumbotron">
-    <button type="button" class="btn btn-lg btn-primary" data-toggle="collapse" data-target="#collapseExample">編集</button>
-      <div class="collapse" id="collapseExample">
-        <div class="col-md-10 col-md-offset-2">
-          <%= render 'form',{user: user} %>
+      <div class="panel-group" id="sampleAccordion">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <button type="button" class="btn btn-lg btn-primary" data-toggle="collapse" data-target="#collapseExample">編集</button>
+            <div class="collapse" id="collapseExample">
+              <div class="panel-body">
+                <%= render 'form',{user: user} %>
+              </div>  
+            </div>
+          </div>
         </div>
       </div>
-  </div>
-</div>
       <% end %>
   </div>
 </div>
