@@ -75,7 +75,7 @@
            end
         %>
         <tr>
-          <td><%= link_to "残業申請", edit_basic_info_user_path(@user), remote: true, class: "btn btn-primary" %></td>
+          <td><%= link_to "残業申請", attendances_edit_overwork_request_user_path(@user), remote: true, class: "btn btn-primary" %></td>
           <td><%= l(day.worked_on, format: :short) %></td>
           <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
           <td><%= l(day.started_at.floor_to(15.minutes), format: :hour) if day.started_at.present? %></td>
@@ -124,4 +124,4 @@
 </div>
 
 <!--モーダルウインドウ表示-->
-<div id="edit-basic-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="edit_overwork_request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
