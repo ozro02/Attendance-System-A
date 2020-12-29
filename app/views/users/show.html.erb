@@ -27,6 +27,7 @@
 
 <div class="btn-users-show">
   <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
+  <!--%= "CSV出力", class: "btn btn-primary" %>-->
 </div>
 
 <div>
@@ -74,7 +75,7 @@
            end
         %>
         <tr>
-          <td></td>
+          <td><%= link_to "残業申請", edit_basic_info_user_path(@user), remote: true, class: "btn btn-primary" %></td>
           <td><%= l(day.worked_on, format: :short) %></td>
           <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
           <td><%= l(day.started_at.floor_to(15.minutes), format: :hour) if day.started_at.present? %></td>
@@ -121,3 +122,6 @@
     </tfoot>
   </table>
 </div>
+
+<!--モーダルウインドウ表示-->
+<div id="edit-basic-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
