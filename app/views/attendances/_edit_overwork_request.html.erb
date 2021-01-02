@@ -12,7 +12,7 @@
     <div class="modal-body">
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
-          <%= form_with(model: @user, url: attendances_update_overwork_request_path(@user), local: true, method: :patch) do |f| %>
+          <%= form_with(model: @user, url: attendances_update_overwork_request_path(params[<:day.worked_on]), local: true, method: :patch) do |f| %>
             <table class="table table-bordered table-condensed table-hover" id="table-attendances">
               <thead>
                 <tr>
@@ -25,6 +25,22 @@
                 </tr>
                 
               <tbody>
+                <% @attendances.each do |day| %>
+                  <%= f.fields_for "attendances[]",day do |attendance| %>
+                    <td><%= l(@day, format: :short) %></td>
+                    <% if @day.wday == 6 %>
+                      <td class="sat"><%= $days_of_the_week[@day.wday] %></td>
+                    <% elsif @day.wday == 0 %>
+                      <td class="sun"><%= $days_of_the_week[@day.wday] %></td>
+                    <% else %>
+                      <td><%= $days_of_the_week[@day.wday] %></td>
+                    <% end %>
+                    <td><%= attendance.time_field :scheduled_end_time, class: "form-control" %></td>
+                    <td><%= attendance.check_box :next_day, id="next_day" %></td>
+                    <td><%= attendance.text_field :business_process, class: "form-control" %></td>
+                    <td><%= attendance.select :confirmation, class: "form-control" %></td>
+                  <% end %>
+                <% end %>
               </tbody>
 
             <div class="center">

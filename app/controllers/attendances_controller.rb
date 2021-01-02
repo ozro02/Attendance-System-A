@@ -49,6 +49,10 @@ class AttendancesController < ApplicationController
   end
   
   def update_overwork_request
+    @attendance = @user.attendances.find_by(worked_on: @day)
+    @attendance.update_attributes(overwork_params)
+    flash[:success] = "残業を申請しました。"
+    redirect_to @user
   end
 
   private
@@ -56,6 +60,10 @@ class AttendancesController < ApplicationController
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
       params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+    end
+    # 残業申請を扱います。
+    def overwork_params
+      params.require(:user).permit(attendances: [:scheduled_end_time, :next_day, :business_process, :confirmation])[:attendances]
     end
 
     # beforeフィルター
