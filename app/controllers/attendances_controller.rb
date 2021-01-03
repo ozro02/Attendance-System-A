@@ -1,5 +1,5 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month]
+  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overwork_request, :update_overwork_request]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
   before_action :set_one_month, only: :edit_one_month
@@ -44,16 +44,19 @@ class AttendancesController < ApplicationController
   end
   
   def edit_overwork_request
-    @day = Date.parse(params[:day])
-    @attendance = @user.attendances.find_by(worked_on: @day)
-  end
-  
-  def update_overwork_request
-    @attendance = @user.attendances.find_by(worked_on: @day)
+    @attendance = Attendance.find(params[:id])
+    @user = User.find(@attendance.use_id)
     @attendance.update_attributes(overwork_params)
-    flash[:success] = "残業を申請しました。"
+    flash[:info] = "残業申請を送信しました。"
     redirect_to @user
   end
+  
+  # def update_overwork_request
+    # @attendance = @user.attendances.find_by(worked_on: @day)
+    # @attendance.update_attributes(overwork_params)
+    # flash[:success] = "残業を申請しました。"
+    # redirect_to @user
+  # end
 
   private
 
@@ -63,7 +66,7 @@ class AttendancesController < ApplicationController
     end
     # 残業申請を扱います。
     def overwork_params
-      params.require(:user).permit(attendances: [:scheduled_end_time, :next_day, :business_process, :confirmation])[:attendances]
+      params.require(:user).permit(attendances: [:scheduled_end_time, :business_process, :confirmation])[:attendances]
     end
 
     # beforeフィルター
