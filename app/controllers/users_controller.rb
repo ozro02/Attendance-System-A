@@ -58,6 +58,7 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
   
+
   private
 
     def user_params
@@ -65,9 +66,10 @@ class UsersController < ApplicationController
     end
     
     def basic_info_params
-      params.require(:user).permit(:name, :email, :affiliation, :employee_number, :uid, :password, 
-                                   :basic_work_time, :designated_work_start_time, :designated_work_end_time)
+      params.require(:user).permit(:name, :email, :affiliation, :password, :department, :work_time)
     end
+    
+    
     
     # beforeフィルター
 

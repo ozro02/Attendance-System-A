@@ -1,0 +1,8 @@
+class AddColumnsToAttendances < ActiveRecord::Migration[5.1]
+  def change
+    add_column :attendances, :scheduled_end_time, :datetime
+    add_column :attendances, :next_day, :date
+    add_column :attendances, :business_process, :string
+    add_column :attendances, :confirmation, :string
+  end
+end

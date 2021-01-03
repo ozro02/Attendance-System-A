@@ -24,27 +24,24 @@
                 </tr>
                 
               <tbody>
-                <% @attendances.each do |day| %>
-                  <% css_class = 
-                     case $days_of_the_week[day.worked_on.wday]
+                <% css_class = 
+                     case $days_of_the_week[@attendance.worked_on.wday]
                      when '土'
                        'text-primary'
                      when '日'
                        'text-danger'
                      end
                   %>
-                  <%= f.fields_for "attendances[]",day do |attendance| %>
-                    <td><%= l(day.worked_on, format: :short) %></td>
-                    <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
-                    <% end %>
+                  <%= f.fields_for "attendances", @attendance do |attendance| %>
+                    <td><%= l(@attendance.worked_on, format: :short) %></td>
+                    <td class="<%= css_class %>"><%= $days_of_the_week[@attendance.worked_on.wday] %></td>
                     <td><%= attendance.time_field :scheduled_end_time, class: "form-control" %></td>
                     <td><%= attendance.check_box :next_day %></td>
                     <td><%= attendance.text_field :business_process, class: "form-control" %></td>
                     <td><%= attendance.select :confirmation, class: "form-control" %></td>
                   <% end %>
-                <% end %>
               </tbody>
-
+              </table>
             <div class="center">
               <%= f.submit yield(:button_text), class: "btn btn-primary" %>
             </div>
