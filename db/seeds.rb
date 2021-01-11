@@ -9,12 +9,14 @@ User.create!(name: "管理者",
 User.create!(name: "上長A",
              email: "sample-1@email.com",
              password: "password",
-             password_confirmation: "password")
+             password_confirmation: "password",
+             superior: true)
              
 User.create!(name: "上長B",
              email: "sample-2@email.com",
              password: "password",
-             password_confirmation: "password")
+             password_confirmation: "password",
+             superior: true)
 
 User.create!(name: "社員1",
              email: "sample-3@email.com",
