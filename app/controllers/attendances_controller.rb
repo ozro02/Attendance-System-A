@@ -27,6 +27,7 @@ class AttendancesController < ApplicationController
   end
 
   def edit_one_month
+    time.finished_at.hour + 24 if [:next_day_check] == "1"
   end
 
   def update_one_month
@@ -46,6 +47,7 @@ class AttendancesController < ApplicationController
   def edit_overwork_request
     @day = Date.parse(params[:day])
     @attendance = @user.attendances.find_by(worked_on: @day)
+    @superior = User.where(superior: true).where.not( id: current_user.id )
   end
   
   def update_overwork_request
@@ -64,7 +66,7 @@ class AttendancesController < ApplicationController
     
     # 残業申請を扱います。
     def overwork_params
-      params.require(:user).permit(attendances: [:scheduled_end_time, :business_process, :confirmation])[:attendances]
+      params.require(:user).permit(attendances: [:scheduled_end_time, :next_day, :business_process, :confirmation])[:attendances]
     end
 
     # beforeフィルター

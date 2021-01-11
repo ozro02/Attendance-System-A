@@ -59,4 +59,8 @@ class User < ApplicationRecord
       all
     end
   end  
+  
+  # 上長を定義
+  scope :superior_users { where(superior: true).where.not( id: current_user.id )}
+  
 end
