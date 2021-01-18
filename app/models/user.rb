@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :attendances, dependent: :destroy
+  has_many :approvals, dependent: :destroy
   # 「remember_token」という仮想の属性を作成します。
   attr_accessor :remember_token
   before_save { self.email = email.downcase }
@@ -61,6 +62,6 @@ class User < ApplicationRecord
   end  
   
   # 上長を定義
-  scope :superior_users { where(superior: true).where.not( id: current_user.id )}
+  scope :superior_users, -> { where(superior: true).where.not(id: current_user.id)}
   
 end
