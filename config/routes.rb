@@ -13,9 +13,12 @@ Rails.application.routes.draw do
       patch 'update_basic_info'
       get 'attendances/edit_one_month' 
       patch 'attendances/update_one_month' 
-      get 'attendances/edit_overwork_request' # 残業申請用に追加。
-      patch 'attendances/update_overwork_request' # 残業申請用に追加。
     end
-    resources :attendances, only: :update
+    resources :attendances, only: :update do
+      member do
+        get 'edit_overwork_request' # 残業申請用に追加。
+        patch 'update_overwork_request' # 残業申請用に追加。
+      end
+    end
   end
 end

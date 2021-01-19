@@ -11,7 +11,8 @@
       <h4 class="modal-title center">【残業申請】</h4>
       <div class="row">
         <div class="col-md-12">
-          <%= form_with(model: @attendance, url: attendances_update_overwork_request_user_path, local: true, method: :patch) do |f| %>
+          <%= form_with(model: @attendance, url: update_overwork_request_user_attendance_path(@user, @attendance), local: true, method: :patch) do |f| %>
+            <%= f.hidden_field :request, :value => "申請中" %>
             <table class="table table-bordered table-condensed table-hover" id="table-attendances">
               <thead>
                 <tr>
@@ -31,15 +32,13 @@
                        'text-danger'
                      end
                   %>
-                <%= f.fields_for "attendances", @attendance do |attendance| %>
                   <td><%= l(@attendance.worked_on, format: :short) %></td>
                   <td class="<%= css_class %>"><%= $days_of_the_week[@attendance.worked_on.wday] %></td>
-                  <td><%= attendance.time_field :scheduled_end_time, class: "form-control" %></td>
-                  <td><%= attendance.check_box :next_day %></td>
-                  <td><%= attendance.text_field :business_process, placeholder: "入力必須", class: "form-control" %></td>
-                  <td><%= attendance.select :confirmation, @superior, {prompt: "上長を選択して下さい"}, {class: "form-control input-sm" ,required: true } %></td>
+                  <td><%= f.time_field :scheduled_end_time, class: "form-control" %></td>
+                  <td><%= f.check_box :next_day %></td>
+                  <td><%= f.text_field :business_process, placeholder: "入力必須", class: "form-control" %></td>
+                  <td><%= f.collection_select :confirmation, @superior, :id, :name, {prompt: "上長を選択して下さい"}, {class: "form-control input-sm" ,required: true } %></td>
                   <!--<td>%= attendance.select :confirmation, Attendance.confirmations.keys.to_a, {include_blank: true, required: true} %></td>-->
-                 <% end %>
                </tbody>
              </table>
             <div class="center">

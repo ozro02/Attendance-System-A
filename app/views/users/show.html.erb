@@ -25,6 +25,12 @@
   </table>
 </div>
 
+<div class="news">
+  <p>【所属長勤怠申請のお知らせ】</p>
+  <p>【勤怠編集申請のお知らせ】</p>
+  <p>【残業編集申請のお知らせ】</p>
+</div>
+
 <div class="btn-users-show">
   <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
   <!--%= "CSV出力", class: "btn btn-primary" %>-->
@@ -73,7 +79,7 @@
            end
         %>
         <tr>
-          <td><%= link_to "残業申請", attendances_edit_overwork_request_user_path(@user, day: day.worked_on), remote: true, class: "btn btn-primary" %></td>
+          <td><%= link_to "残業申請", edit_overwork_request_user_attendance_path(@user, day), remote: true, class: "btn btn-primary" %></td>
           <td><%= l(day.worked_on, format: :short) %></td>
           <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
           <td><%= l(day.started_at.floor_to(15.minutes), format: :hour) if day.started_at.present? %></td>
@@ -113,14 +119,13 @@
         <td colspan="6">総合勤務時間</td>
         <td colspan="1">累計在社時間</td>
         <td colspan="5"></td>
-        <td colspan="1">所属長承認</td>
+        <td rowspan="1">所属長承認　未</td>
       </tr>
       <tr>
         <td colspan="3"><%= @attendances.count %></td>
         <td colspan="6"><%= format_basic_info(@user.work_time).to_f * @worked_sum %></td>
         <td colspan="1"><%= format("%.2f", @total_working_times.to_f) %></td>
         <td colspan="5"></td>
-        <td colspan="1"></td>
       </tr>
     </tfoot>
   </table>

@@ -27,6 +27,6 @@ class Attendance < ApplicationRecord
     end
   end
   
-  enum confirmation: { "なし" => 1, "申請中" => 2, "承認" => 3, "否認" => 4 }
+  # enum confirmation: { "なし" => 1, "申請中" => 2, "承認" => 3, "否認" => 4 }
   
 end
