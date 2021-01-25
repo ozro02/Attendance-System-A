@@ -11,17 +11,19 @@
       <h4 class="modal-title center">【残業申請】</h4>
       <div class="row">
         <div class="col-md-12">
-          <%= form_with(model: @attendance, url: update_overwork_request_user_attendance_path(@user, @attendance), local: true, method: :patch) do |f| %>
-            <%= f.hidden_field :request, :value => "申請中" %>
+          <%= form_with(model: @attendance, url: update_overwork_notice_user_attendances_path(@user), local: true, method: :patch) do |f| %>
+            <!--%= f.hidden_field :request, :value => "申請中" %>-->
             <table class="table table-bordered table-condensed table-hover" id="table-attendances">
               <thead>
                 <tr>
                   <th>日付</th>
                   <th>曜日</th>
-                  <th>終了予定時間</th>
-                  <th>翌日</th>
+                  <th>指定勤務終了時間</th>
+                  <th>時間外時間</th>
                   <th>業務処理内容</th>
                   <th>指示者確認㊞</th>
+                  <th>変更</th>
+                  <th>勤怠を確認する</th>
                 </tr>
               <tbody>
                 <% css_class = 
@@ -34,10 +36,13 @@
                   %>
                   <td><%= l(@attendance.worked_on, format: :short) %></td>
                   <td class="<%= css_class %>"><%= $days_of_the_week[@attendance.worked_on.wday] %></td>
-                  <td><%= f.time_field :scheduled_end_time, class: "form-control" %></td>
-                  <td><%= f.check_box :next_day %></td>
-                  <td><%= f.text_field :business_process, placeholder: "入力必須", class: "form-control" %></td>
-                  <td><%= f.collection_select :confirmation, @superior, :id, :name, {prompt: "上長を選択して下さい"}, {class: "form-control input-sm" ,required: true } %></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                </tbody>
              </table>
             <div class="center">

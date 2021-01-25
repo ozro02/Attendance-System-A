@@ -19,6 +19,10 @@ Rails.application.routes.draw do
         get 'edit_overwork_request' # 残業申請用に追加。
         patch 'update_overwork_request' # 残業申請用に追加。
       end
+      collection do
+        get 'edit_overwork_notice' # 残業申請のお知らせ用に追加。
+        patch 'update_overwork_notice' # 残業申請のお知らせ用に追加。
+      end
     end
   end
 end
