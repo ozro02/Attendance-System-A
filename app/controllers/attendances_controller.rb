@@ -53,20 +53,18 @@ class AttendancesController < ApplicationController
   def update_overwork_request
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
-    if @attendance.update_attributes(overwork_params)
-      flash[:success] = "残業を申請しました。"
+    if params[:attendance][:scheduled_end_time].blank? || params[:attendance][:business_process].blank? || params[:attendance][:confirmation].blank?
+      flash[:danger] = "必須項目が空欄です。"
       redirect_to @user
-    else flash[:danger] = "無効なデータがありました。"
-      redirect_to @user  
+    else @attendance.update_attributes(overwork_params)
+      flash[:success] = "残業を申請しました。"
+      redirect_to @user 
     end
   end
   
   def edit_overwork_notice
     @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
-    # @notice_user = User.
-    # @attendance = @user.attendances.find(params[:id])
-    # @superior = User.where(superior: true).where.not(id: current_user.id)
+    @attendance = @user.attendances.where(confirmation:current_user.id)
   end
   
   def update_overwork_notice

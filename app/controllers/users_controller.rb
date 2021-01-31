@@ -67,10 +67,8 @@ class UsersController < ApplicationController
     end
     
     def basic_info_params
-      params.require(:user).permit(:name, :email, :affiliation, :password, :department, :work_time)
+      params.require(:user).permit(:name, :email, :affiliation, :password, :work_time)
     end
-    
-    
     
     # beforeフィルター
 
