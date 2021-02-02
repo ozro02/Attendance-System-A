@@ -64,7 +64,7 @@ class AttendancesController < ApplicationController
   
   def edit_overwork_notice
     @user = User.find(params[:user_id])
-    @attendance = @user.attendances.where(confirmation:current_user.id)
+    @attendances = Attendance.where(request: "申請中", confirmation: @user.id)
   end
   
   def update_overwork_notice

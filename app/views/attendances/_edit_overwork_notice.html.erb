@@ -8,11 +8,8 @@
       </button>
     </div>
     <div class="modal-body">
-      <h4 class="modal-title center">【残業申請】</h4>
-      <div class="row">
-        <div class="col-md-12">
-          <%= form_with(model: @attendance, url: update_overwork_notice_user_attendances_path(@user), local: true, method: :patch) do |f| %>
-            <!--%= f.hidden_field :request, :value => "申請中" %>-->
+      <h4 class="modal-title center">【の残業申請】</h4>
+        <%= form_with(model: @user, url: update_overwork_notice_user_attendances_path(@user), local: true, method: :patch) do |f| %>
             <table class="table table-bordered table-condensed table-hover" id="table-attendances">
               <thead>
                 <tr>
@@ -26,25 +23,27 @@
                   <th>変更</th>
                   <th>勤怠を確認する</th>
                 </tr>
+              </thead>
+              <% @attendances.each do |attendance| %>
               <tbody>
-                  <td><%= l(attendance.worled_on, format: :short) %></td>
+                <tr>
+                  <td><%= l(attendance.worked_on, format: :short) %></td>
                   <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
-                  <td><%= @attendance.scheduled_end_time%></td>
+                  <td><%= attendance.scheduled_end_time.strftime("%H:%M") %></td>
                   <td><%= @user.designated_work_end_time.strftime("%H:%M") %></td>
-                  <td><%= attendance.try(:overtime_memo) %></td>
+                  <td><%= format_basic_info(attendance.scheduled_end_time - @user.designated_work_end_time) %></td>
+                  <td><%= attendance.try(:business_process) %></td>
+                  <td><%= f.select :judgement, Attendance.judgements.keys.to_a, {include_blank: true} %></td>
                   <td></td>
                   <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                 </tr>
                </tbody>
+               <% end %>
              </table>
             <div class="center">
               <%= f.submit yield(:button_text), class: "btn btn-primary btn-block" %>
             </div>
           <% end %>
-        </div>
-      </div>
     </div>
   </div>
 </div>

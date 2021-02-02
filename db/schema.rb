@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210131144106) do
+ActiveRecord::Schema.define(version: 20210202125952) do
 
   create_table "approvals", force: :cascade do |t|
     t.integer "applicant_user_id"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20210131144106) do
     t.string "business_process"
     t.string "confirmation"
     t.string "request"
+    t.string "judgement"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
@@ -48,12 +49,12 @@ ActiveRecord::Schema.define(version: 20210131144106) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "department"
-    t.datetime "basic_time", default: "2021-01-30 23:00:00"
-    t.datetime "work_time", default: "2021-01-30 22:30:00"
+    t.datetime "basic_time", default: "2021-02-01 23:00:00"
+    t.datetime "work_time", default: "2021-02-01 22:30:00"
     t.string "affiliation"
     t.boolean "superior", default: false
-    t.datetime "designated_work_start_time", default: "2021-01-31 00:00:00"
-    t.datetime "designated_work_end_time", default: "2021-01-31 09:00:00"
+    t.datetime "designated_work_start_time", default: "2021-02-02 00:00:00"
+    t.datetime "designated_work_end_time", default: "2021-02-02 09:00:00"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
