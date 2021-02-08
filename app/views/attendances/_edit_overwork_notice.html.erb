@@ -31,7 +31,7 @@
                   <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
                   <td><%= attendance.scheduled_end_time.strftime("%H:%M") %></td>
                   <td><%= @user.designated_work_end_time.strftime("%H:%M") %></td>
-                  <td><%= format_basic_info(attendance.scheduled_end_time - @user.designated_work_end_time) %></td>
+                  <td><%= overworking_times(@user.designated_work_end_time, attendance.scheduled_end_time, next_day) %></td>
                   <td><%= attendance.try(:business_process) %></td>
                   <td><%= f.select :judgement, Attendance.judgements.keys.to_a, {include_blank: true} %></td>
                   <td></td>

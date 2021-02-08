@@ -112,7 +112,7 @@
           <td><%= day.note %></td>
           <td><%= l(day.scheduled_end_time.floor_to(15.minutes), format: :hour) if day.scheduled_end_time.present? %></td>
           <td><%= l(day.scheduled_end_time.floor_to(15.minutes), format: :minute) if day.scheduled_end_time.present? %></td>
-          <td></td>
+          <td><%= overworking_times(day.scheduled_end_time, @user.designated_work_end_time, day.next_day) %></td>
           <td><%= day.business_process %></td>
           <td></td>
         </tr>
