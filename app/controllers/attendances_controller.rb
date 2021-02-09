@@ -64,10 +64,11 @@ class AttendancesController < ApplicationController
   
   def edit_overwork_notice
     @user = User.find(params[:user_id])
-    @attendances = Attendance.where(request: "申請中", confirmation: @user.id)
+    @attendances = Attendance.where(request: "残業申請中", confirmation: @user.id)
   end
   
   def update_overwork_notice
+    @user = User.find(params[:user_id])
   end
   
   private
@@ -80,6 +81,11 @@ class AttendancesController < ApplicationController
     # 残業申請を扱います。
     def overwork_params
       params.require(:attendance).permit(:scheduled_end_time, :next_day, :business_process, :confirmation, :request)
+    end
+    
+     # 残業申請承認を扱います。
+    def overwork_approval_params
+      params.require(:user).permit(attendance: [:judgement, :change])[:attendances]
     end
 
     # beforeフィルター
