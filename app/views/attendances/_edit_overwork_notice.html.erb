@@ -8,7 +8,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <h4 class="modal-title center">【の残業申請】</h4>
+      <h4 class="modal-title center">【#{@user.name}からの残業申請】</h4>
         <%= form_with(model: @user, url: update_overwork_notice_user_attendances_path(@user), local: true, method: :patch) do |f| %>
             <table class="table table-bordered table-condensed table-hover" id="table-attendances">
               <thead>
@@ -35,7 +35,7 @@
                   <td><%= attendance.try(:business_process) %></td>
                   <td><%= f.select :judgement, Attendance.judgements.keys.to_a, {include_blank: true} %></td>
                   <td><%= f.check_box :next_day, {}, true, false %></td>
-                  <td></td>
+                  <td><%= link_to "確認", user_path(attendance), method: :get, class: "btn btn-primary" %></td>
                  </tr>
                </tbody>
                <% end %>
