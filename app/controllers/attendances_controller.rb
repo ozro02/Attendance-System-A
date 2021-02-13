@@ -2,7 +2,8 @@ class AttendancesController < ApplicationController
   before_action :set_user, only: [:edit_one_month, :update_one_month]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
-  before_action :set_one_month, only: :edit_one_month
+  before_action :set_user_2, only: [:csv_output]
+  before_action :set_one_month, only: [:edit_one_month, :csv_output]
 
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
 
@@ -25,9 +26,17 @@ class AttendancesController < ApplicationController
     end
     redirect_to @user
   end
+  
+  def csv_output
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data render_to_string, filename: "#{@first_day.year}年#{@first_day.month}月の勤怠表.csv", type: :csv
+      end
+    end
+  end
 
   def edit_one_month
-    time.finished_at.hour + 24 if [:next_day_check] == "1"
   end
 
   def update_one_month
@@ -64,8 +73,7 @@ class AttendancesController < ApplicationController
   
   def edit_overwork_notice
     @user = User.find(params[:user_id])
-    @request_user = Attendance.find_by(request: "残業申請中")
-    @attendances = Attendance.where(request: "残業申請中", confirmation: @user.id)
+    @attendances = Attendance.where(request: "残業申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
   end
   
   def update_overwork_notice
@@ -118,5 +126,9 @@ class AttendancesController < ApplicationController
         flash[:danger] = "編集権限がありません。"
         redirect_to(root_url)
       end  
+    end
+    
+    def set_user_2
+      @user = User.find(params[:user_id])
     end
 end

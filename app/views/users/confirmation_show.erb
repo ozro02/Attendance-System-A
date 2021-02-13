@@ -3,9 +3,7 @@
   <table class="table table-bordered table-condensed user-table">
     <tr>
       <td>
-        <%= link_to "◀", user_path(date: @first_day.prev_month), class: "btn btn-primary" %>
         【<%= l(@first_day, format: :middle) %>】勤怠管理表
-        <%= link_to "▶", user_path(date: @first_day.next_month), class: "btn btn-primary" %>
       </td>
       <td>指定勤務開始時間：<%= @user.designated_work_start_time.strftime("%H:%M") %><br>
           指定勤務終了時間：<%= @user.designated_work_end_time.strftime("%H:%M") %>
@@ -23,24 +21,6 @@
       <td>月末日：<%= l(@last_day, format: :short) %></td>
     </tr>
   </table>
-</div>
-
-<div class="news">
-  <% if @user.superior? %>
-  <p>【所属長勤怠申請のお知らせ】</p>
-  <p>【勤怠編集申請のお知らせ】</p>
-    <% if @request_count > 0 %>
-      <%= link_to "【残業編集申請のお知らせ】", edit_overwork_notice_user_attendances_path(@user), remote: true, :style=>"color:red;" %>
-      <b class="box1"><%= @request_count %>件の通知があります。</b>
-    <% else %>
-      <p>【残業申請のお知らせ】</p>
-    <% end %>
-  <% end %> 
-</div>
-
-<div class="btn-users-show">
-  <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
-  <%= link_to "CSV出力", csv_output_user_attendances_path(@user, format: :csv, date: @first_day), class: "btn btn-primary" %>
 </div>
 
 <div>
@@ -76,33 +56,16 @@
     </thead>
 
     <tbody>
-      <% @attendances.each do |day| %>
-        <% css_class = 
-           case $days_of_the_week[day.worked_on.wday]
-           when '土'
-             'text-primary'
-           when '日'
-             'text-danger'
-           end
-        %>
         <tr>
-          <td><%= link_to "残業申請", edit_overwork_request_user_attendance_path(@user, day), remote: true, class: "btn btn-primary" %></td>
+          <td></td>
           <td><%= l(day.worked_on, format: :short) %></td>
-          <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
+          <td><%= $days_of_the_week[day.worked_on.wday] %></td>
           <td><%= l(day.started_at.floor_to(15.minutes), format: :hour) if day.started_at.present? %></td>
           <td><%= l(day.started_at.floor_to(15.minutes), format: :minute) if day.started_at.present? %></td>
-          <td>
-            <% if attendance_state(day) && day.started_at.blank? %>
-              <%= link_to "出勤登録", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
-            <% end %>
-          </td>
+          <td></td>
           <td><%= l(day.finished_at.floor_to(15.minutes), format: :hour) if day.finished_at.present? %></td>
           <td><%= l(day.finished_at.floor_to(15.minutes), format: :minute) if day.finished_at.present? %></td>
-          <td>
-            <% if attendance_state(day) && day.started_at.present? && day.finished_at.blank? %>
-              <%= link_to "退勤登録", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
-            <% end %>
-          </td>
+          <td></td>
           <td>
             <% if day.started_at.present? && day.finished_at.present? %>
               <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
@@ -144,7 +107,3 @@
     </tfoot>
   </table>
 </div>
-
-<!--モーダルウインドウ表示-->
-<div id="edit_overwork_request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>　<!--残業申請表示-->
-<div id="edit_overwork_notice" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>　<!--残業申請のお知らせ表示-->

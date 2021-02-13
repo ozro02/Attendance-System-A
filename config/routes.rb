@@ -11,8 +11,9 @@ Rails.application.routes.draw do
     member do
       get 'edit_basic_info'
       patch 'update_basic_info'
-      get 'attendances/edit_one_month' 
-      patch 'attendances/update_one_month' 
+      get 'attendances/edit_one_month'
+      patch 'attendances/update_one_month'
+      get 'confirmation_show'
     end
     resources :attendances, only: :update do
       member do
@@ -22,6 +23,7 @@ Rails.application.routes.draw do
       collection do
         get 'edit_overwork_notice' # 残業申請のお知らせ用に追加。
         patch 'update_overwork_notice' # 残業申請のお知らせ用に追加。
+        get 'csv_output' # CSV出力用に追加。
       end
     end
   end

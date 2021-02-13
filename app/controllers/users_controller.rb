@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
-  before_action :logged_in_user, only: [:edit, :update, :destroy, :edit_basic_info, :update_basic_info]
-  before_action :admin_or_correct_user, only: [:show, :edit, :update]
+  before_action :set_user, only: [:show, :confirmation_show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
+  before_action :logged_in_user, only: [:confirmation_show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
+  before_action :admin_or_correct_user, only: [:show, :confirmation_show, :edit, :update]
   before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info]
-  before_action :set_one_month, only: :show
+  before_action :set_one_month, only: [:show, :confirmation_show]
   
   def index
     @users = User.paginate(page: params[:page]).search(params[:search])
@@ -12,6 +12,9 @@ class UsersController < ApplicationController
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
     @request_count = Attendance.where(request: "残業申請中", confirmation: @user.id).count # 残業申請のお知らせ件数
+  end
+  
+  def confirmation_show
   end
   
   def new
