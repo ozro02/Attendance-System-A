@@ -56,10 +56,19 @@
     </thead>
 
     <tbody>
+      <% @attendances.each do |day| %>
+        <% css_class = 
+           case $days_of_the_week[day.worked_on.wday]
+           when '土'
+             'text-primary'
+           when '日'
+             'text-danger'
+           end
+        %>
         <tr>
           <td></td>
           <td><%= l(day.worked_on, format: :short) %></td>
-          <td><%= $days_of_the_week[day.worked_on.wday] %></td>
+          <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
           <td><%= l(day.started_at.floor_to(15.minutes), format: :hour) if day.started_at.present? %></td>
           <td><%= l(day.started_at.floor_to(15.minutes), format: :minute) if day.started_at.present? %></td>
           <td></td>
@@ -96,7 +105,7 @@
         <td colspan="6">総合勤務時間</td>
         <td colspan="1">累計在社時間</td>
         <td colspan="5"></td>
-        <td rowspan="1">所属長承認　未</td>
+        <td rowspan="2">所属長承認　未</td>
       </tr>
       <tr>
         <td colspan="3"><%= @attendances.count %></td>
@@ -106,4 +115,5 @@
       </tr>
     </tfoot>
   </table>
+  <%= link_to "戻る", user_path(current_user), method: :get, class: "btn btn-primary" %>
 </div>

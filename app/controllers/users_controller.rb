@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :confirmation_show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
-  before_action :logged_in_user, only: [:confirmation_show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
-  before_action :admin_or_correct_user, only: [:show, :confirmation_show, :edit, :update]
+  before_action :logged_in_user, only: [:edit, :update, :destroy, :edit_basic_info, :update_basic_info]
+  before_action :admin_or_correct_user, only: [:show, :edit, :update]
   before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info]
   before_action :set_one_month, only: [:show, :confirmation_show]
   
@@ -15,6 +15,7 @@ class UsersController < ApplicationController
   end
   
   def confirmation_show
+    @worked_sum = @attendances.where.not(started_at: nil).count
   end
   
   def new

@@ -1,7 +1,7 @@
 class AttendancesController < ApplicationController
   before_action :set_user, only: [:edit_one_month, :update_one_month]
   before_action :logged_in_user, only: [:update, :edit_one_month]
-  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
+  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :update_overwork_notice]
   before_action :set_user_2, only: [:csv_output]
   before_action :set_one_month, only: [:edit_one_month, :csv_output]
 
@@ -78,6 +78,7 @@ class AttendancesController < ApplicationController
   
   def update_overwork_notice
     @user = User.find(params[:user_id])
+    @attendances = Attendance.where(request: "残業申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
     # # if params[:attendance][:change] == true && params[:attendance][:judge] == "承認"
     #   @attendance.update_attributes(overwork_approval_params)
     #   flash[:success] = "残業申請を承認しました。"
@@ -92,7 +93,7 @@ class AttendancesController < ApplicationController
     # end
     # redirect_to @user 
     if params[:change] == true
-      @attendance.update_attributes(overwork_approval_params)
+      @attendances.update_attributes(overwork_approval_params)
       flash[:success] = "残業申請情報を変更しました。"
     else
       flash[:danger] = "変更欄にチェックが必要です。"
@@ -114,7 +115,7 @@ class AttendancesController < ApplicationController
     
      # 残業申請承認を扱います。
     def overwork_approval_params
-      params.require(:users).permit(attendances: [:judgement, :change])[:attendances]
+      params.require(:user).permit(attendances: [:judgement, :change])[:attendances]
     end
 
     # beforeフィルター
