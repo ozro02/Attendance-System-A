@@ -28,10 +28,10 @@
               <td><%= attendance.time_field :started_at, class: "form-control" %></td>
               <td><%= attendance.time_field :finished_at, class: "form-control" %></td>
             <% end %>
-            <td><%= attendance.check_box :next_day, {:checked => false}, 0 %></td>
+            <td><%= attendance.check_box :next_day, {}, true, false %></td>
             <td>
               <% if day.started_at.present? && day.finished_at.present? %>
-                <%= working_times(day.started_at, day.finished_at) %>
+                <%= working_times(day.started_at, day.finished_at, day.next_day) %>
               <% end %>
             </td>
             <% if Date.current < day.worked_on %>

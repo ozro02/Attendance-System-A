@@ -92,20 +92,20 @@ class AttendancesController < ApplicationController
     #   flash[:danger] = "変更欄にチェックが必要です。"
     # end
     # redirect_to @user 
-    if params[:change] == true
+    if params[:user][:attendances][:change] == true
       @attendances.update_attributes(overwork_approval_params)
       flash[:success] = "残業申請情報を変更しました。"
     else
       flash[:danger] = "変更欄にチェックが必要です。"
     end
-    redirect_to @user
+      redirect_to @user
   end
   
   private
 
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :next_day, :note])[:attendances]
     end
     
     # 残業申請を扱います。
