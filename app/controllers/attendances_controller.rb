@@ -110,9 +110,13 @@ class AttendancesController < ApplicationController
   end
   
   def edit_attendance_change_notice
+    @user = User.find(params[:user_id])
+    @attendances = Attendance.where(request: "勤怠編集申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
   end
   
   def update_attendance_change_notice
+    @user = User.find(params[:user_id])
+    @attendances = Attendance.where(request: "勤怠編集申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
   end
   
   private
