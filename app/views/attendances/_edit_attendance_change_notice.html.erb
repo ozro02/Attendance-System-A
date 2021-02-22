@@ -1,0 +1,53 @@
+<% provide(:button_text, '変更を送信する') %>
+
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header" style="border:none">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <%= form_with(model: @user, url: update_overwork_notice_user_attendances_path(@user), local: true, method: :patch) do |f| %>
+        <% @attendances.each do |user_id, attendances| %>
+          <h4 class="modal-title center">【<%= User.find(user_id).name %>からの残業申請】</h4>
+          <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+            <thead>
+              <tr>
+                <th>日付</th>
+                <th>曜日</th>
+                <th>終了予定時間</th>
+                <th>指定勤務終了時間</th>
+                <th>時間外時間</th>
+                <th>業務処理内容</th>
+                <th>指示者確認㊞</th>
+                <th>変更</th>
+                <th>勤怠を確認する</th>
+              </tr>
+            </thead>
+            <% attendances.each do |day| %>
+              <%= f.fields_for "attendances[]", day do |d| %>
+                <tbody>
+                  <tr>
+                    <td><%= l(day.worked_on, format: :short) %></td>
+                    <td><%= $days_of_the_week[day.worked_on.wday] %></td>
+                    <td><%= day.scheduled_end_time.strftime("%H:%M") %></td>
+                    <td><%= User.find(user_id).designated_work_end_time.strftime("%H:%M") %></td>
+                    <td><%= overworking_times(day.scheduled_end_time.floor_to(15.minutes), User.find(user_id).designated_work_end_time.floor_to(15.minutes), day.next_day) %></td>
+                    <td><%= day.business_process %></td>
+                    <td><%= d.select :judgement, Attendance.judgements.keys.to_a, {include_blank: true} %></td>
+                    <td><%= d.check_box :change, {}, true, false %></td>
+                    <td><%= link_to "確認", confirmation_show_user_path(User.find(user_id)), method: :get, class: "btn btn-primary" %></td>
+                  </tr>
+                </tbody>
+              <% end %>
+            <% end %>
+          </table>
+        <% end %>
+        <div class="center">
+          <%= f.submit yield(:button_text), class: "btn btn-primary btn-block" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

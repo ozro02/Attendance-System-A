@@ -1,5 +1,6 @@
 <% provide(:title, @user.name) %>
 <%= form_with(model: @user, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
+  <%= f.hidden_field :request, :value => "勤怠編集申請中" %>
   <div>
     <h1>勤怠編集画面</h1>
     <table class="table table-bordered table-condensed table-hover" id="table-attendances">
@@ -39,7 +40,7 @@
             <% else %>
               <td><%= attendance.text_field :note, class: "form-control" %></td>
             <% end %>
-            <td></td>
+            <td><%= attendance.collection_select :confirmation, @superior, :id, :name, {prompt: "上長を選択して下さい"}, {class: "form-control input-sm" ,required: true } %></td>
           </tr>
         <% end %>
       <% end %>

@@ -3,9 +3,13 @@
   <div>
     <h1>勤怠ログ</h1>
     <%= form_with(model: @attendances, url: attendance_log_user_attendances_path(@user), local: true, method: :get) do |f| %>
-    <div class="center">
-      <%= f.submit "ログ取得", class: "btn btn-lg btn-primary" %>
-      <%= link_to "リセット", attendance_log_user_attendances_path(@user), class: "btn btn-lg btn-default" %>
+    <div class="form-group">
+      <label>年</label>
+      <%= f.collection_select :confirmation, @superior, :id, :name, {prompt: "選択して下さい"}, {class: "form-control" ,required: true } %>
+    </div>
+    <div class="form-group">
+      <%= f.submit "ログ取得", class: "btn btn-primary" %>
+      <%= link_to "リセット", attendance_log_user_attendances_path(@user), class: "btn btn-default" %>
     </div>
   
     <table class="table table-bordered table-condensed table-hover" id="table-attendances">

@@ -36,12 +36,13 @@ class AttendancesController < ApplicationController
     end
   end
   
-  def attendance_log
-    @superior = User.where(superior: true).where.not(id: current_user.id)
-    @attendances = @user.attendances.where(judgement: "承認", confirmation: @superior.id)
-  end
+  # def attendance_log
+  #   @superior = User.where(superior: true).where.not(id: current_user.id)
+  #   @attendances = @user.attendances.where(judgement: "承認", confirmation: @superior)
+  # end
 
   def edit_one_month
+    @superior = User.where(superior: true).where.not(id: current_user.id)
   end
 
   def update_one_month
@@ -106,6 +107,12 @@ class AttendancesController < ApplicationController
       # end
     end
     redirect_to @user
+  end
+  
+  def edit_attendance_change_notice
+  end
+  
+  def update_attendance_change_notice
   end
   
   private

@@ -28,10 +28,15 @@
 <div class="news">
   <% if @user.superior? %>
   <p>【所属長勤怠申請のお知らせ】</p>
-  <p>【勤怠編集申請のお知らせ】</p>
-    <% if @request_count > 0 %>
+    <% if @attendance_change_request_count > 0 %>
+      <%= link_to "【勤怠編集申請のお知らせ】", edit_attendance_change_notice_user_attendances_path(@user), remote: true, :style=>"color:red;" %>
+      <b class="box1"><%= @attendance_change_request_count %>件の通知があります。</b>
+    <% else %>
+      <p>【勤怠編集申請のお知らせ】</p>
+    <% end %>
+    <% if @overwork_request_count > 0 %>
       <%= link_to "【残業編集申請のお知らせ】", edit_overwork_notice_user_attendances_path(@user), remote: true, :style=>"color:red;" %>
-      <b class="box1"><%= @request_count %>件の通知があります。</b>
+      <b class="box1"><%= @overwork_request_count %>件の通知があります。</b>
     <% else %>
       <p>【残業申請のお知らせ】</p>
     <% end %>
@@ -41,7 +46,7 @@
 <div class="btn-users-show">
   <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
   <%= link_to "CSV出力", csv_output_user_attendances_path(@user, format: :csv, date: @first_day), class: "btn btn-primary" %>
-  <!--< %= link_to "勤怠修正ログ（承認済）",　attendance_log_user_attendances_path(@user), class: "btn btn-primary" %>-->
+  <!--< %= link_to "勤怠修正ログ（承認済）", attendance_log_user_attendances_path(@user), class: "btn btn-primary" %>-->
 </div>
 
 <div>
@@ -135,13 +140,14 @@
         <td colspan="6">総合勤務時間</td>
         <td colspan="1">累計在社時間</td>
         <td colspan="5"></td>
-        <td rowspan="1">所属長承認　未</td>
+        <td>所属長承認　未</td>
       </tr>
       <tr>
         <td colspan="3"><%= @attendances.count %></td>
         <td colspan="6"><%= format_basic_info(@user.work_time).to_f * @worked_sum %></td>
         <td colspan="1"><%= format("%.2f", @total_working_times.to_f) %></td>
         <td colspan="5"></td>
+        <!--<td>< %= collection_select :confirmation, @superior, :id, :name, {prompt: "上長を選択して下さい"}, {class: "form-control input-sm" ,required: true } %></td>-->
       </tr>
     </tfoot>
   </table>
@@ -150,3 +156,4 @@
 <!--モーダルウインドウ表示-->
 <div id="edit_overwork_request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>　<!--残業申請表示-->
 <div id="edit_overwork_notice" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>　<!--残業申請のお知らせ表示-->
+<div id="edit_attendance_change_notice" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>　<!--勤怠変更申請のお知らせ表示-->
