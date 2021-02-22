@@ -2,7 +2,7 @@ class AttendancesController < ApplicationController
   before_action :set_user, only: [:edit_one_month, :update_one_month]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :update_overwork_notice]
-  before_action :set_user_2, only: [:csv_output]
+  before_action :set_user_2, only: [:csv_output, :attendance_log]
   before_action :set_one_month, only: [:edit_one_month, :csv_output]
 
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
@@ -35,6 +35,11 @@ class AttendancesController < ApplicationController
       end
     end
   end
+  
+  def attendance_log
+    @superior = User.where(superior: true).where.not(id: current_user.id)
+    @attendances = @user.attendances.where(judgement: "承認", confirmation: @superior.id)
+  end
 
   def edit_one_month
   end
@@ -64,11 +69,10 @@ class AttendancesController < ApplicationController
     @attendance = @user.attendances.find(params[:id])
     if params[:attendance][:scheduled_end_time].blank? || params[:attendance][:business_process].blank? || params[:attendance][:confirmation].blank?
       flash[:danger] = "必須項目が空欄です。"
-      redirect_to @user
     else @attendance.update_attributes(overwork_params)
       flash[:success] = "残業を申請しました。"
-      redirect_to @user 
     end
+    redirect_to @user 
   end
   
   def edit_overwork_notice
@@ -79,6 +83,8 @@ class AttendancesController < ApplicationController
   def update_overwork_notice
     @user = User.find(params[:user_id])
     @attendances = Attendance.where(request: "残業申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
+    overwork_approval_params.each do |id, item|
+      attendance = Attendance.find(id)
     # # if params[:attendance][:change] == true && params[:attendance][:judge] == "承認"
     #   @attendance.update_attributes(overwork_approval_params)
     #   flash[:success] = "残業申請を承認しました。"
@@ -92,13 +98,14 @@ class AttendancesController < ApplicationController
     #   flash[:danger] = "変更欄にチェックが必要です。"
     # end
     # redirect_to @user 
-    if params[:user][:attendances][:change] == true
-      @attendances.update_attributes(overwork_approval_params)
-      flash[:success] = "残業申請情報を変更しました。"
-    else
-      flash[:danger] = "変更欄にチェックが必要です。"
+      # if params[:user][:attendances][:change] == true
+        attendance.update_attributes(item)
+        flash[:success] = "残業申請情報を変更しました。"
+      # else
+      #   flash[:danger] = "変更欄にチェックが必要です。"
+      # end
     end
-      redirect_to @user
+    redirect_to @user
   end
   
   private
