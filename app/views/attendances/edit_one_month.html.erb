@@ -18,7 +18,7 @@
       <tbody>
         <% @attendances.each do |day| %>
           <%= f.fields_for "attendances[]", day do |attendance| %>
-          <%= f.hidden_field :change_request, :value => "勤怠編集申請中" %>
+          <%= f.hidden_field :change_request, :value => "申請中" %>
             <tr>
             <td><%= l(day.worked_on, format: :short) %></td>
             <td><%= $days_of_the_week[day.worked_on.wday] %></td>
@@ -37,10 +37,11 @@
             </td>
             <% if Date.current < day.worked_on %>
               <td><%= attendance.text_field :note, readonly: true, class: "form-control" %></td>
+              <td><%= attendance.collection_select :confirmation, @superior, :id, :name, {prompt: "上長を選択して下さい"}, {class: "form-control input-sm" ,required: true } %></td>
             <% else %>
               <td><%= attendance.text_field :note, class: "form-control" %></td>
+              <td><%= attendance.collection_select :confirmation, @superior, :id, :name, {prompt: "上長を選択して下さい"}, {class: "form-control input-sm" ,required: true } %></td>
             <% end %>
-            <td><%= attendance.collection_select :confirmation, @superior, :id, :name, {prompt: "上長を選択して下さい"}, {class: "form-control input-sm" ,required: true } %></td>
           </tr>
         <% end %>
       <% end %>

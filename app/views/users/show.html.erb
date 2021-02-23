@@ -123,10 +123,12 @@
           <td><%= overworking_times(day.scheduled_end_time.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.next_day) if day.scheduled_end_time.present? %></td>
           <td><%= day.business_process %></td>
           <td>
-            <% if day.judgement == "承認" %>
+            <% if day.request == "承認" %>
               <%= "残業承認済"%>
-            <% elsif day.judgement == "否認" %>
-              <%= "残業否認"%>
+            <% elsif day.request == "否認" %>
+              <%= "残業申請否認"%>
+            <% elsif day.request == "申請中"%>
+              <%= "残業申請中"%>
             <% else %>
               <%= day.request %>
             <% end %>

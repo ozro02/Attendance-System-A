@@ -11,8 +11,8 @@ class UsersController < ApplicationController
   
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
-    @overwork_request_count = Attendance.where(request: "残業申請中", confirmation: @user.id).count # 残業申請のお知らせ件数
-    @change_request_count = Attendance.where(change_request: "勤怠編集申請中", confirmation: @user.id).count # 勤怠編集申請のお知らせ件数
+    @overwork_request_count = Attendance.where(request: "申請中", confirmation: @user.id).count # 残業申請のお知らせ件数
+    @change_request_count = Attendance.where(change_request: "申請中", confirmation: @user.id).count # 勤怠編集申請のお知らせ件数
   end
   
   def confirmation_show # 勤怠確認画面用

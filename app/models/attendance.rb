@@ -27,6 +27,6 @@ class Attendance < ApplicationRecord
     end
   end
   
-  enum judgement: { なし: 1, 申請中: 2, 承認: 3, 否認: 4 }
-  
+  enum request: { なし: "なし", 申請中: "申請中", 承認: "承認", 否認: "否認" }
+  enum change_request: { なし: "なし", 申請中: "申請中", 承認: "承認", 否認: "否認" }
 end

@@ -78,45 +78,33 @@ class AttendancesController < ApplicationController
   
   def edit_overwork_notice # 残業申請承認用
     @user = User.find(params[:user_id])
-    @attendances = Attendance.where(request: "残業申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
+    @attendances = Attendance.where(request: "申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
   end
   
   def update_overwork_notice # 残業申請承認用
     @user = User.find(params[:user_id])
-    @attendances = Attendance.where(request: "残業申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
-    overwork_approval_params.each do |id, item|
-      attendance = Attendance.find(id)
-    # # if params[:attendance][:change] == true && params[:attendance][:judge] == "承認"
-    #   @attendance.update_attributes(overwork_approval_params)
-    #   flash[:success] = "残業申請を承認しました。"
-    # elsif params[:attendance][:change] == true && params[:attendance][:judge] == "否認"
-    #   @attendance.update_attributes(overwork_approval_params)
-    #   flash[:success] = "残業申請を否認しました。"
-    # elsif params[:attendance][:change] == true && params[:attendance][:judge] == "なし"
-    #   @attendance.update_attributes(overwork_approval_params)
-    #   flash[:success] = "残業申請を取り消しました。"
-    # else
-    #   flash[:danger] = "変更欄にチェックが必要です。"
-    # end
-    # redirect_to @user 
-      # if params[:user][:attendances][:change] == true
-      attendance.update_attributes(item)
-    end
+    ActiveRecord::Base.transaction do 
+      overwork_approval_params.each do |id, item|
+        if item[:change] == "true"  
+          attendance = Attendance.find(id)
+          attendance.update_attributes!(item)
+        end
+      end
       flash[:success] = "残業申請情報を変更しました。"
-      redirect_to @user
-      # else
-      #   flash[:danger] = "変更欄にチェックが必要です。"
-      # end
+      redirect_to @user and return
+    end
+  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+    flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+    redirect_to @user and return
   end
   
   def edit_change_notice # 勤怠編集申請用
     @user = User.find(params[:user_id])
-    @attendances = Attendance.where(request: "勤怠編集申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
+    @attendances = Attendance.where(change_request: "申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
   end
   
   def update_change_notice # 勤怠編集申請用
     @user = User.find(params[:user_id])
-    @attendances = Attendance.where(request: "勤怠編集申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
   end
   
   private
@@ -133,7 +121,7 @@ class AttendancesController < ApplicationController
     
      # 残業申請承認を扱います。
     def overwork_approval_params
-      params.require(:user).permit(attendances: [:judgement, :change])[:attendances]
+      params.require(:user).permit(attendances: [:request, :change])[:attendances]
     end
 
     # beforeフィルター

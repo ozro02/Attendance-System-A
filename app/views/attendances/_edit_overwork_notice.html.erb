@@ -35,7 +35,7 @@
                     <td><%= User.find(user_id).designated_work_end_time.strftime("%H:%M") %></td>
                     <td><%= overworking_times(day.scheduled_end_time.floor_to(15.minutes), User.find(user_id).designated_work_end_time.floor_to(15.minutes), day.next_day) %></td>
                     <td><%= day.business_process %></td>
-                    <td><%= d.select :judgement, Attendance.judgements.keys.to_a, {include_blank: true} %></td>
+                    <td><%= d.select :request, Attendance.requests.keys.to_a, {include_blank: true} %></td>
                     <td><%= d.check_box :change, {}, true, false %></td>
                     <td><%= link_to "確認", confirmation_show_user_path(User.find(user_id)), method: :get, class: "btn btn-primary" %></td>
                   </tr>
