@@ -27,13 +27,15 @@
 
 <div class="news">
   <% if @user.superior? %>
-  <p>【所属長勤怠申請のお知らせ】</p>
-    <% if @attendance_change_request_count > 0 %>
-      <%= link_to "【勤怠編集申請のお知らせ】", edit_attendance_change_notice_user_attendances_path(@user), remote: true, :style=>"color:red;" %>
-      <b class="box1"><%= @attendance_change_request_count %>件の通知があります。</b>
+    <p>【所属長勤怠申請のお知らせ】</p>
+  
+    <% if @change_request_count > 0 %>
+      <%= link_to "【勤怠編集申請のお知らせ】", edit_change_notice_user_attendances_path(@user), remote: true, :style=>"color:red;" %>
+      <b class="box1"><%= @change_request_count %>件の通知があります。</b>
     <% else %>
       <p>【勤怠編集申請のお知らせ】</p>
     <% end %>
+    
     <% if @overwork_request_count > 0 %>
       <%= link_to "【残業編集申請のお知らせ】", edit_overwork_notice_user_attendances_path(@user), remote: true, :style=>"color:red;" %>
       <b class="box1"><%= @overwork_request_count %>件の通知があります。</b>
@@ -121,9 +123,9 @@
           <td><%= overworking_times(day.scheduled_end_time.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.next_day) if day.scheduled_end_time.present? %></td>
           <td><%= day.business_process %></td>
           <td>
-            <% if day.judgement == :承認 %>
+            <% if day.judgement == "承認" %>
               <%= "残業承認済"%>
-            <% elsif day.judgement == :否認 %>
+            <% elsif day.judgement == "否認" %>
               <%= "残業否認"%>
             <% else %>
               <%= day.request %>
@@ -156,4 +158,4 @@
 <!--モーダルウインドウ表示-->
 <div id="edit_overwork_request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>　<!--残業申請表示-->
 <div id="edit_overwork_notice" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>　<!--残業申請のお知らせ表示-->
-<div id="edit_attendance_change_notice" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>　<!--勤怠変更申請のお知らせ表示-->
+<div id="edit_change_notice" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>　<!--勤怠変更申請のお知らせ表示-->

@@ -23,10 +23,11 @@ Rails.application.routes.draw do
       collection do
         get 'edit_overwork_notice' # 残業申請のお知らせ用に追加。
         patch 'update_overwork_notice' # 残業申請のお知らせ用に追加。
-        get 'edit_attendance_change_notice' # 勤怠変更申請のお知らせ用に追加。
-        patch 'update_attendance_change_notice' # 勤怠変更申請のお知らせ用に追加。
+        get 'edit_change_notice' # 勤怠変更申請のお知らせ用に追加。
+        patch 'update_change_notice' # 勤怠変更申請のお知らせ用に追加。
         get 'csv_output' # CSV出力用に追加。
         # get 'attendance_log' # 勤怠修正ログ取得用に追加。
+        # post 'attendance_log' # 勤怠修正ログ取得用に追加。
       end
     end
   end

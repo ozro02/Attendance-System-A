@@ -59,13 +59,13 @@ class AttendancesController < ApplicationController
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
-  def edit_overwork_request
+  def edit_overwork_request # 残業申請用
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
     @superior = User.where(superior: true).where.not(id: current_user.id)
   end
   
-  def update_overwork_request
+  def update_overwork_request # 残業申請用
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
     if params[:attendance][:scheduled_end_time].blank? || params[:attendance][:business_process].blank? || params[:attendance][:confirmation].blank?
@@ -76,12 +76,12 @@ class AttendancesController < ApplicationController
     redirect_to @user 
   end
   
-  def edit_overwork_notice
+  def edit_overwork_notice # 残業申請承認用
     @user = User.find(params[:user_id])
     @attendances = Attendance.where(request: "残業申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
   end
   
-  def update_overwork_notice
+  def update_overwork_notice # 残業申請承認用
     @user = User.find(params[:user_id])
     @attendances = Attendance.where(request: "残業申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
     overwork_approval_params.each do |id, item|
@@ -100,21 +100,21 @@ class AttendancesController < ApplicationController
     # end
     # redirect_to @user 
       # if params[:user][:attendances][:change] == true
-        attendance.update_attributes(item)
-        flash[:success] = "残業申請情報を変更しました。"
+      attendance.update_attributes(item)
+    end
+      flash[:success] = "残業申請情報を変更しました。"
+      redirect_to @user
       # else
       #   flash[:danger] = "変更欄にチェックが必要です。"
       # end
-    end
-    redirect_to @user
   end
   
-  def edit_attendance_change_notice
+  def edit_change_notice # 勤怠編集申請用
     @user = User.find(params[:user_id])
     @attendances = Attendance.where(request: "勤怠編集申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
   end
   
-  def update_attendance_change_notice
+  def update_change_notice # 勤怠編集申請用
     @user = User.find(params[:user_id])
     @attendances = Attendance.where(request: "勤怠編集申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
   end
