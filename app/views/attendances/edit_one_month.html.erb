@@ -35,14 +35,9 @@
                 <%= working_times(day.started_at, day.finished_at, day.next_day) %>
               <% end %>
             </td>
-            <% if Date.current < day.worked_on %>
-              <td><%= attendance.text_field :note, readonly: true, class: "form-control" %></td>
-              <td><%= attendance.collection_select :confirmation, @superior, :id, :name, {prompt: "上長を選択して下さい"}, {class: "form-control input-sm" ,required: true } %></td>
-            <% else %>
-              <td><%= attendance.text_field :note, class: "form-control" %></td>
-              <td><%= attendance.collection_select :confirmation, @superior, :id, :name, {prompt: "上長を選択して下さい"}, {class: "form-control input-sm" ,required: true } %></td>
-            <% end %>
-          </tr>
+            <td><%= attendance.text_field :note, class: "form-control" %></td>
+            <td><%= attendance.collection_select :confirmation, @superior, :id, :name, {prompt: "上長を選択して下さい"}, {class: "form-control input-sm" ,required: true } %></td>
+            </tr>
         <% end %>
       <% end %>
       </tbody>
