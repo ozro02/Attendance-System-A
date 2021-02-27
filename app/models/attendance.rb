@@ -10,6 +10,8 @@ class Attendance < ApplicationRecord
   validate :started_at_than_finished_at_fast_if_invalid
   # 出勤日以外で退勤時間が存在しない場合、出勤時間は無効
   validate :started_at_is_invalid_without_a_finished_at
+  # 上長選択済みの勤怠で出勤時間または退勤時間が存在しない場合は無効
+  validate :started_at_or_finished_at_is_required
 
   def finished_at_is_invalid_without_a_started_at
     errors.add(:started_at, "が必要です") if started_at.blank? && finished_at.present?
@@ -24,6 +26,12 @@ class Attendance < ApplicationRecord
   def started_at_is_invalid_without_a_finished_at
     unless Date.current == worked_on
     errors.add(:finished_at, "が必要です") if started_at.present? && finished_at.blank? 
+    end
+  end
+  
+  def started_at_or_finished_at_is_required
+    if confirmation.present?
+    errors.add(:started_at, "または", :finished_at, "が必要です") if started_at.blank? || finished_at.blank? 
     end
   end
   
