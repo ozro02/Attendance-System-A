@@ -55,7 +55,7 @@
                     <td><%= day.finished_at.strftime("%H") %></td>
                     <td><%= day.finished_at.strftime("%M") %></td>
                     <td><%= day.note %></td>
-                    <td><%= d.select :change_request, Attendance.change_requests.keys.to_a, {include_blank: true} %></td>
+                    <td><%= d.select :change_request, Attendance.change_requests.keys.to_a, {include_blank: true}, selected: nil %></td>
                     <td><%= d.check_box :change, {}, true, false %></td>
                     <td><%= link_to "確認", confirmation_show_user_path(User.find(user_id)), method: :get, class: "btn btn-primary" %></td>
                   </tr>

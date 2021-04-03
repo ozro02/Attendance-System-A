@@ -59,16 +59,19 @@ class AttendancesController < ApplicationController
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
-  def edit_overwork_request # 残業申請用
+  # 残業申請モーダル
+  def edit_overwork_request 
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
     @superior = User.where(superior: true).where.not(id: current_user.id)
   end
   
-  def update_overwork_request # 残業申請用
+  # 残業申請の更新処理
+  def update_overwork_request 
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
-    if params[:attendance][:scheduled_end_time].blank? || params[:attendance][:business_process].blank? || params[:attendance][:confirmation].blank?
+    if overwork_params_update_invalid?
+      params[:attendance][:confirmation].blank?
       flash[:danger] = "必須項目が空欄です。"
     else @attendance.update_attributes(overwork_params)
       flash[:success] = "残業を申請しました。"
@@ -76,12 +79,14 @@ class AttendancesController < ApplicationController
     redirect_to @user 
   end
   
-  def edit_overwork_notice # 残業申請承認用
+  # 残業申請お知らせのモーダル
+  def edit_overwork_notice 
     @user = User.find(params[:user_id])
     @attendances = Attendance.where(request: "申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
   end
   
-  def update_overwork_notice # 残業申請承認用
+  # 残業申請お知らせの更新
+  def update_overwork_notice 
     @user = User.find(params[:user_id])
     ActiveRecord::Base.transaction do 
       overwork_approval_params.each do |id, item|
@@ -98,12 +103,14 @@ class AttendancesController < ApplicationController
     redirect_to @user and return
   end
   
-  def edit_change_notice # 勤怠編集申請用
+  # 勤怠編集のお知らせモーダル
+  def edit_change_notice 
     @user = User.find(params[:user_id])
     @attendances = Attendance.where(change_request: "申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
   end
   
-  def update_change_notice # 勤怠編集申請用
+  # 勤怠編集お知らせモーダルの更新
+  def update_change_notice 
     @user = User.find(params[:user_id])
   end
   
@@ -123,6 +130,11 @@ class AttendancesController < ApplicationController
     def overwork_approval_params
       params.require(:user).permit(attendances: [:request, :change])[:attendances]
     end
+    
+    # 勤怠編集申請承認を扱います。
+    # def attendances_approval_params
+    #   params.require(:user).permit(attendances: [:change_request, :change])[:attendances]
+    # end
 
     # beforeフィルター
 
