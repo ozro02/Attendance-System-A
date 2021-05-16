@@ -70,13 +70,24 @@ class AttendancesController < ApplicationController
   def update_overwork_request 
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
-    if overwork_params_update_invalid?
-      params[:attendance][:confirmation].blank?
-      flash[:danger] = "必須項目が空欄です。"
-    else @attendance.update_attributes(overwork_params)
-      flash[:success] = "残業を申請しました。"
-    end
-    redirect_to @user 
+    # if overwork_params_updated_invalid?
+      if params[:attendance][:confirmation].blank?
+        flash[:danger] = "上長が選択されていません。"
+        redirect_to @user
+      else @attendance.update_attributes(overwork_params)
+        flash[:success] = "残業を申請しました。"
+        redirect_to @user
+      end
+    # else
+      if params[:attendance][:scheduled_end_time] << @user.designated_work_end_time &&
+          params[:attendance][:next_day] == "false"
+        flash[:danger] = "指定勤務終了時間より早い終了予定時間は無効です。"
+        redirect_to @user
+      else
+        flash[:success] = "申請情報に不正な入力があるため、残業申請できませんでした。"
+        redirect_to @user
+      end
+    # end
   end
   
   # 残業申請お知らせのモーダル
@@ -104,7 +115,7 @@ class AttendancesController < ApplicationController
   end
   
   # 勤怠編集のお知らせモーダル
-  def edit_change_notice 
+  def edit_change_notice
     @user = User.find(params[:user_id])
     @attendances = Attendance.where(change_request: "申請中", confirmation: @user.id).order(:user_id).group_by(&:user_id)
   end
